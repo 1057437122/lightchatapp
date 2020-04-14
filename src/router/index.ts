@@ -24,21 +24,39 @@ const routes: Array<RouteConfig> = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: "/friends",
+    name: "Friends",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Friends.vue"),
+    meta: {
+      requiresAuth: true
+    }
   }
 ];
 
 const router = new VueRouter({
   routes
 });
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   // const currentUser = firebase.auth().currentUser;
-  let token: string | undefined = store.state.token;
-  if (!token) token = getToken();
-  debugger;
-  if (requiresAuth && !token) {
+  let accessToken: string | undefined = store.state.accessToken;
+  if (!accessToken) {
+    accessToken = getToken();
+  }
+
+  if (requiresAuth && !accessToken) {
     next("/login");
-  } else if (requiresAuth && token) {
+  } else if (requiresAuth && accessToken) {
+    // get user info
+    store.commit("SET_ACCESS_TOKEN", accessToken);
+    await store.dispatch("getMyInfo");
+    console.log(store.state);
     next();
   } else {
     next();

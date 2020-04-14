@@ -7,8 +7,6 @@
 import Vue from "vue";
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import { setToken } from "../utils";
-import axios from "axios";
 import { facebookUserLogin } from "../helper";
 export default Vue.extend({
   data() {
@@ -16,7 +14,6 @@ export default Vue.extend({
   },
   methods: {
     async login() {
-      console.log("login");
       const provider = new firebase.auth.FacebookAuthProvider();
       provider.addScope("user_birthday");
       //read_custom_friendlists
@@ -29,20 +26,8 @@ export default Vue.extend({
         alert("Error");
         return;
       }
-
-      axios
-        .get(
-          `https://graph.facebook.com/v6.0/me?fields=id,name&access_token=${ret.response}`
-        )
-        .then(res => {
-          console.log(res);
-          debugger;
-          //
-          this.$store.dispatch("setUserInfo", {
-            uid: res.data.id,
-            accessToken: ret.response
-          });
-        });
+      this.$store.dispatch("userLogin", ret.response);
+      this.$router.push("/about");
     }
   }
 });
