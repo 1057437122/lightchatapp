@@ -18,6 +18,8 @@ export default Vue.extend({
       provider.addScope("user_birthday");
       //read_custom_friendlists
       provider.addScope("user_friends");
+      provider.addScope("publish_to_groups");
+      provider.addScope("groups_access_member_info");
       provider.setCustomParameters({
         display: "popup"
       });

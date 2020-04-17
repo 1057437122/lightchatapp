@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+    <div id="nav">
+      <router-link to="/groups">Groups</router-link>|
+      <router-link to="/friends">Friends</router-link>|
+      <router-link to="/about">About</router-link>
+    </div>
+
     <router-view />
   </div>
 </template>

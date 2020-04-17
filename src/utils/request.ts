@@ -1,6 +1,6 @@
 import axios from "axios";
 import store from "@/store";
-
+import { message } from "ant-design-vue";
 const service = axios.create({
   baseURL: "https://graph.facebook.com/v6.0", // url = base url + request url
   timeout: 5000
@@ -27,6 +27,8 @@ service.interceptors.response.use(
     return response;
   },
   error => {
+    //error.response.data.error.message
+    message.info("error" + error.message);
     console.log(error);
     return Promise.reject(error);
   }
